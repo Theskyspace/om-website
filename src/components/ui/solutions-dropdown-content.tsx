@@ -102,7 +102,7 @@ const moneyOneSolutionSections: SolutionSection[] = [
           width: 56,
           height: 56
         },
-        href: "/moneyone/solutions/wealth-management"
+        href: "https://moneyone.in/solutions/wealth-management"
       },
       {
         id: "lending",
@@ -114,7 +114,7 @@ const moneyOneSolutionSections: SolutionSection[] = [
           width: 56,
           height: 56
         },
-        href: "/moneyone/solutions/lending"
+        href: "https://moneyone.in/solutions/lending"
       },
       {
         id: "advisory",
@@ -126,7 +126,7 @@ const moneyOneSolutionSections: SolutionSection[] = [
           width: 56,
           height: 56
         },
-        href: "/moneyone/solutions/advisory"
+        href: "https://moneyone.in/solutions/advisory"
       },
       {
         id: "brokerage",
@@ -138,7 +138,7 @@ const moneyOneSolutionSections: SolutionSection[] = [
           width: 56,
           height: 56
         },
-        href: "/moneyone/solutions/brokerage"
+        href: "https://moneyone.in/solutions/brokerage"
       },
     ]
   }
@@ -182,8 +182,8 @@ const SolutionItem: React.FC<{ item: SolutionItem; index: number }> = ({ item, i
               {item.title}
             </h3>
             <div className={`${item.id === "bfsi-services" || item.id === "technology-provider"
-                ? "opacity-0 rotate-0 group-hover:opacity-100 group-hover:-rotate-45"
-                : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+              ? "opacity-0 rotate-0 group-hover:opacity-100 group-hover:-rotate-45"
+              : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
               } transition-all duration-200 ease-out`}>
               <ArrowRight className="w-4 h-4 text-[#00b140]" />
             </div>
