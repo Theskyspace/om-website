@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getDomainSpecificHref } from "@/lib/utils";
+import { getCompanySection, transformHref, type CompanySection } from "@/config/domain-config";
 
 interface FooterSection {
   title: string;
@@ -15,23 +15,6 @@ interface FooterSection {
     openInNewTab?: boolean;
   }>;
 }
-
-// Company section detection logic (same as MainHeader.tsx)
-type CompanySection = 'equal' | 'moneyone' | 'onemoney' | 'default';
-
-const getCompanySection = (pathname: string): CompanySection => {
-  const host = typeof window !== 'undefined' ? window.location.host : '';
-  if (pathname.startsWith('/employment') || pathname.startsWith('/solutions')) {
-    return 'equal';
-  }
-  if (pathname.startsWith('/moneyone') || host.includes("moneyone.in")) {
-    return 'moneyone';
-  }
-  if (pathname.startsWith('/onemoney') || host.includes("onemoney.in")) {
-    return 'onemoney';
-  }
-  return 'default';
-};
 
 // Dynamic footer sections based on company section
 const getFooterSections = (section: CompanySection): FooterSection[] => [
@@ -138,7 +121,7 @@ export function MainFooter() {
                       </div>
                     ) : (
                       <Link
-                        href={getDomainSpecificHref(link.href)}
+                        href={transformHref(link.href)}
                         className={`text-sm transition-colors duration-200 ${
                           pathname === link.href
                             ? "text-[#00b140] font-medium"

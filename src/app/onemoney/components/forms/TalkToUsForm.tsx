@@ -10,6 +10,7 @@ import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 // @ts-ignore
 import emailjs from 'emailjs-com';
 import { ShimmerButton } from "@/components/ui/shimmer-button";
+import { getFormPurposeOptions } from "@/config/domain-config";
 
 export function TalkToUsForm({ source }: { source?: string }) {
   const [formData, setFormData] = useState({
@@ -56,26 +57,10 @@ export function TalkToUsForm({ source }: { source?: string }) {
     setPurposeDropdownOpen(false);
   };
 
-  // Define purpose options based on host
+  // Get purpose options from centralized config
   const getPurposeOptions = () => {
-    if (host === 'equal.in') {
-      return [
-        { value: "Employment", label: "Employment" },
-        { value: "BFSI", label: "BFSI" },
-        { value: "AI Assistant", label: "AI Assistant" },
-        { value: "General", label: "General" }
-      ];
-    } else if (host === 'onemoney.in' || host === 'moneyone.in') {
-      return [
-        { value: "General", label: "General" },
-        { value: "Business Enquiry", label: "Business Enquiry" },
-        { value: "Customer Query", label: "Customer Query" }
-      ];
-    }
-    // Default fallback
-    return [
-      { value: "General", label: "General" }
-    ];
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    return getFormPurposeOptions(pathname, host);
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -88,7 +73,7 @@ export function TalkToUsForm({ source }: { source?: string }) {
     // Determine the source site
     const siteName = source || (typeof window !== 'undefined' ? window.location.pathname.split('/')[1] || 'unknown' : 'unknown');
     const siteUrl = typeof window !== 'undefined' ? window.location.href : 'unknown';
-    
+
     emailjs.send(
       SERVICE_ID,
       TEMPLATE_ID,
@@ -104,7 +89,7 @@ export function TalkToUsForm({ source }: { source?: string }) {
       },
       USER_ID
     )
-    .then((result: any) => {
+      .then((result: any) => {
         setSubmitted(true);
         setLoading(false);
         setFormData({
@@ -115,17 +100,17 @@ export function TalkToUsForm({ source }: { source?: string }) {
           purpose: "",
           comments: "",
         });
-    }, (error: any) => {
+      }, (error: any) => {
         setLoading(false);
         alert("There was an error sending your message. Please try again.");
         console.error(error.text);
-    });
+      });
   };
 
   // Motion values for textarea hover effect
   const textareaMouseX = useMotionValue(0);
   const textareaMouseY = useMotionValue(0);
-  
+
   // Create motion template unconditionally
   const motionTemplate = useMotionTemplate`
     radial-gradient(
@@ -162,7 +147,7 @@ export function TalkToUsForm({ source }: { source?: string }) {
         </Label>
         <Input id="email" placeholder="rakhesh@work.in" type="email" value={formData.email} onChange={handleChange} required />
       </div>
-       <div className="space-y-2">
+      <div className="space-y-2">
         <Label htmlFor="phone">Phone Number</Label>
         <Input id="phone" placeholder="+91 90100 98899" type="tel" value={formData.phone} onChange={handleChange} />
       </div>
@@ -191,7 +176,7 @@ export function TalkToUsForm({ source }: { source?: string }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </button>
-          
+
           {purposeDropdownOpen && (
             <div className="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-neutral-700 rounded-md shadow-lg">
               {getPurposeOptions().map((option) => (

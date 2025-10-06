@@ -1,7 +1,10 @@
+'use client';
+
 import dynamic from 'next/dynamic';
 import React, { useMemo } from 'react';
 import { Hero } from "./sections/Hero"; 
 import { GlowingDivider } from "@/components/ui/glowing-divider";
+import { ScrollToHash } from './components/ScrollToHash';
 
 // Dynamically import the Stats component
 const Stats = dynamic(() => 
@@ -75,6 +78,7 @@ export default function Home() {
 
   return (
     <div className="w-full overflow-x-hidden">
+      <ScrollToHash />
       
       <Hero />
       

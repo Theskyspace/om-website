@@ -4,7 +4,8 @@ import Link from "next/link";
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { usePathname } from "next/navigation";
 import { ChevronDown, ArrowRight } from "lucide-react";
-import { cn, getDomainSpecificHref } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getCompanySection, transformHref, type CompanySection } from "@/config/domain-config";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -30,9 +31,7 @@ interface MainHeaderProps {
   className?: string;
 }
 
-// Company section detection and tab configurations
-type CompanySection = 'equal' | 'moneyone' | 'onemoney' | 'default';
-
+// Tab configurations
 interface TabConfig {
   trigger: string;
   content: React.ComponentType;
@@ -57,20 +56,6 @@ interface MobileSection {
     }>;
   }>;
 }
-
-const getCompanySection = (pathname: string): CompanySection => {
-  const host = typeof window !== 'undefined' ? window.location.host : '';
-  if (pathname.startsWith('/employment') || pathname.startsWith('/solutions')) {
-    return 'equal';
-  }
-  if (pathname.startsWith('/moneyone') || host.includes("moneyone.in")) {
-    return 'moneyone';
-  }
-  if (pathname.startsWith('/onemoney') || host.includes("onemoney.in")) {
-    return 'onemoney';
-  }
-  return 'default';
-};
 
 const getHomeUrl = (section: CompanySection): string => {
   return '/';
@@ -342,7 +327,7 @@ const MobileCollapsibleSection = memo(({
                       {link.subItems?.slice(0, 2).map((subItem, subIndex) => (
                         <Link
                           key={subItem.href}
-                          href={getDomainSpecificHref(subItem.href)}
+                          href={transformHref(subItem.href)}
                           className="inline-flex items-center gap-1 px-2 py-2 text-xs font-medium text-[#00b140] bg-[#00b140]/10 rounded-md hover:border-b-2 hover:border-[#00b140] transition-colors duration-200"
                           onClick={onLinkClick}
                         >
@@ -354,7 +339,7 @@ const MobileCollapsibleSection = memo(({
                     {link.subItems && link.subItems.length > 2 && (
                       <div className="flex justify-start">
                         <Link
-                          href={getDomainSpecificHref(link.subItems[2].href)}
+                          href={transformHref(link.subItems[2].href)}
                           className="inline-flex items-center gap-1 px-2 py-2 text-xs font-medium text-[#00b140] bg-[#00b140]/10 rounded-md hover:border-b-2 hover:border-[#00b140] transition-colors duration-200"
                           onClick={onLinkClick}
                         >
@@ -367,7 +352,7 @@ const MobileCollapsibleSection = memo(({
                 </div>
               ) : (
                 <Link
-                  href={getDomainSpecificHref(link.href)}
+                  href={transformHref(link.href)}
                   className={cn(
                     "flex items-center px-6 py-3 text-base font-medium transition-colors",
                     pathname === link.href
@@ -420,7 +405,10 @@ export function MainHeader({ className }: MainHeaderProps) {
   useEffect(() => {
     // Add event listeners
     window.addEventListener("scroll", handleScroll, { passive: true });
-
+    console.log("currentSection", currentSection);
+    console.log("tabConfigs", tabConfigs);
+    console.log("mobileSections", mobileSections);
+    console.log("pathname", pathname);
     // Initial checks
     handleScroll();
 
