@@ -32,8 +32,9 @@ export const DOMAIN_CONFIGS: Record<CompanySection, CompanySectionConfig> = {
   equal: {
     name: 'equal',
     domains: {
-      domains: ['equal.in'],
+      domains: ['equal.in', "d1ql4iv0eak2bb.cloudfront.net"],
       pathPrefixes: ['/employment', '/solutions', '/equal'],
+      cloudfront: ['d1ql4iv0eak2bb.cloudfront.net'],
     },
     formPurposeOptions: [
       { value: "Employment", label: "Employment" },
@@ -50,8 +51,9 @@ export const DOMAIN_CONFIGS: Record<CompanySection, CompanySectionConfig> = {
   moneyone: {
     name: 'moneyone',
     domains: {
-      domains: ['moneyone.in'],
+      domains: ['moneyone.in', "dz99agkntwo9k.cloudfront.net"],
       pathPrefixes: ['/moneyone'],
+      cloudfront: ['dz99agkntwo9k.cloudfront.net'],
     },
     formPurposeOptions: [
       { value: "General", label: "General" },

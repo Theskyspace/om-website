@@ -47,7 +47,7 @@ const getFooterSections = (section: CompanySection): FooterSection[] => [
       { title: "Employment", href: "#", isSubheading: true },
       { title: "Enterprise Verification", href: "/employment/products/enterprise-hiring" },
       { title: "Gig Verification", href: "/employment/products/gig-hiring" },
-      { title: "Custom Workflows", href: "/employment/Industries" },
+      { title: "Custom Workflows", href: "/employment/industries" },
       // Consumer Section
       { title: "Consumer", href: "#", isSubheading: true },
       { title: "Equal AI", href: "/employment" }
