@@ -16,6 +16,8 @@ import { SolutionsDropdownContent } from "@/components/ui/solutions-dropdown-con
 import { ShimmerButton } from "@/components/ui/shimmer-button";
 import { WhyEqualDropdownContent } from "@/components/ui/why-equal-dropdown-content";
 import { ResourcesDropdownContent } from "@/components/ui/resources-dropdown-content";
+import { ProductsDropdownContent } from "@/app/onemoney/components/ProductsDropdownContent";
+import { ResourcesDropdownContent as OneMoneyResourcesDropdownContent } from "@/app/onemoney/components/ResourcesDropdownContent";
 
 // Import dialog components
 import {
@@ -61,148 +63,222 @@ const getHomeUrl = (section: CompanySection): string => {
   return '/';
 };
 
-const getTabConfigurations = (section: CompanySection): TabConfig[] => [
-  {
-    trigger: "ABOUT US",
-    content: WhyEqualDropdownContent,
-    mobileLinks: [
-      { title: "Team", href: "/common/team" },
-      { title: "Vision", href: "/common/vision-mission" },
-      { title: "Leadership", href: "/common/leadership" },
-      { title: "Values", href: "/employment/values" }
-    ]
-  },
-  {
-    trigger: "PRODUCTS",
-    content: ProductDropdownContent,
-    mobileLinks: section === 'moneyone' ? [
-      // BFSI Section only for MoneyOne - no new tab for internal links
-      { title: "OneMoney AA", href: "/onemoney" },
-      { title: "FinPro FIU TSP", href: "/moneyone/products/finpro" },
-      { title: "FinShare FIP TSP", href: "/moneyone/products/finshare" },
-      { title: "Financial Services", href: "/moneyone/financial-services" }
-    ] : [
-      // BFSI Section - open in new tab when viewing from Equal/OneMoney pages
-      { title: "OneMoney AA", href: "/onemoney" },
-      { title: "FinPro FIU TSP", href: "/moneyone/products/finpro", openInNewTab: true },
-      { title: "FinShare FIP TSP", href: "/moneyone/products/finshare", openInNewTab: true },
-      { title: "Financial Services", href: "/moneyone/financial-services", openInNewTab: true },
-      // Employment Section
-      { title: "Enterprise Hiring", href: "/employment/products/enterprise-hiring" },
-      { title: "Gig Hiring", href: "/employment/products/gig-hiring" },
-      { title: "Financial Analytics", href: "/employment/products/financial-services" },
-      { title: "Staffing & Contract", href: "/employment/products/staffing" }
-    ]
-  },
-  {
-    trigger: "USECASES",
-    content: SolutionsDropdownContent,
-    mobileLinks: section === 'moneyone' ? [
-      // MoneyOne specific solutions
-      { title: "Wealth Management", href: "/moneyone/financial-services#wealth-management" },
-      { title: "Lending", href: "/moneyone/financial-services#lending" },
-      { title: "Advisory", href: "/moneyone/financial-services#advisory" },
-      { title: "Brokerage", href: "/moneyone/financial-services#brokerage" }
-    ] : [
-      // Original solutions for other sections
-      { title: "Financial Services", href: "/moneyone/financial-services" },
-      { title: "Employee Verification", href: "/employment/solutions" },
-      { title: "Identity Verification", href: "/employment" },
-      { title: "Financial Analytics", href: "/moneyone/financial-services#moneyone-section" }
-    ]
-  },
-  {
-    trigger: "RESOURCES",
-    content: ResourcesDropdownContent,
-    mobileLinks: section === 'moneyone' ? [
-      // For MoneyOne: exclude privacy policy and terms & conditions
-      { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
-      { title: "Trust & Security", href: "/employment/trust-security" },
-      { title: "Blog", href: "/blog" },
-      { title: "In The News", href: "/blog/in-the-news" }
-    ] : [
-      // For other sections: include all items
-      { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
-      { title: "Trust & Security", href: "/employment/trust-security" },
-      { title: "Blog", href: "/blog" },
-      { title: "In The News", href: "/blog/in-the-news" },
-      { title: "Terms and Conditions", href: "/common/terms-conditions" },
-      { title: "Privacy Policy", href: "/common/policies" }
-    ]
+const getTabConfigurations = (section: CompanySection): TabConfig[] => {
+  // OneMoney section only shows Products, About Us, and Resources
+  if (section === 'onemoney') {
+    return [
+      {
+        trigger: "PRODUCTS",
+        content: ProductsDropdownContent,  // Use OneMoney-specific component
+        mobileLinks: [
+          { title: "How OneMoney Works", href: "/#what-is-onemoney-section" },
+          { title: "Use Cases", href: "/#solutions" }
+        ]
+      },
+      {
+        trigger: "ABOUT US",
+        content: WhyEqualDropdownContent,
+        mobileLinks: [
+          { title: "Team", href: "/common/team" },
+          { title: "Vision", href: "/common/vision-mission" },
+          { title: "Leadership", href: "/common/leadership" },
+          { title: "Values", href: "/employment/values" }
+        ]
+      },
+      {
+        trigger: "RESOURCES",
+        content: OneMoneyResourcesDropdownContent,  // Use OneMoney-specific component
+        mobileLinks: [
+          { title: "Privacy Policy", href: "/onemoney/policies" },
+          { title: "Terms and Conditions", href: "/onemoney/termsconditions" },
+          { title: "Timeline", href: "/onemoney/timeline" },
+          { title: "Compliance", href: "/onemoney/compliance" }
+        ]
+      }
+    ];
   }
-];
+
+  // Default configuration for other sections
+  return [
+    {
+      trigger: "ABOUT US",
+      content: WhyEqualDropdownContent,
+      mobileLinks: [
+        { title: "Team", href: "/common/team" },
+        { title: "Vision", href: "/common/vision-mission" },
+        { title: "Leadership", href: "/common/leadership" },
+        { title: "Values", href: "/employment/values" }
+      ]
+    },
+    {
+      trigger: "PRODUCTS",
+      content: ProductDropdownContent,
+      mobileLinks: section === 'moneyone' ? [
+        // BFSI Section only for MoneyOne - no new tab for internal links
+        { title: "OneMoney AA", href: "/onemoney" },
+        { title: "FinPro FIU TSP", href: "/moneyone/products/finpro" },
+        { title: "FinShare FIP TSP", href: "/moneyone/products/finshare" },
+        { title: "Financial Services", href: "/moneyone/financial-services" }
+      ] : [
+        // BFSI Section - open in new tab when viewing from Equal/OneMoney pages
+        { title: "OneMoney AA", href: "/onemoney" },
+        { title: "FinPro FIU TSP", href: "/moneyone/products/finpro", openInNewTab: true },
+        { title: "FinShare FIP TSP", href: "/moneyone/products/finshare", openInNewTab: true },
+        { title: "Financial Services", href: "/moneyone/financial-services", openInNewTab: true },
+        // Employment Section
+        { title: "Enterprise Hiring", href: "/employment/products/enterprise-hiring" },
+        { title: "Gig Hiring", href: "/employment/products/gig-hiring" },
+        { title: "Financial Analytics", href: "/employment/products/financial-services" },
+        { title: "Staffing & Contract", href: "/employment/products/staffing" }
+      ]
+    },
+    {
+      trigger: "USECASES",
+      content: SolutionsDropdownContent,
+      mobileLinks: section === 'moneyone' ? [
+        // MoneyOne specific solutions
+        { title: "Wealth Management", href: "/moneyone/financial-services#wealth-management" },
+        { title: "Lending", href: "/moneyone/financial-services#lending" },
+        { title: "Advisory", href: "/moneyone/financial-services#advisory" },
+        { title: "Brokerage", href: "/moneyone/financial-services#brokerage" }
+      ] : [
+        // Original solutions for other sections
+        { title: "Financial Services", href: "/moneyone/financial-services" },
+        { title: "Employee Verification", href: "/employment/solutions" },
+        { title: "Identity Verification", href: "/employment" },
+        { title: "Financial Analytics", href: "/moneyone/financial-services#moneyone-section" }
+      ]
+    },
+    {
+      trigger: "RESOURCES",
+      content: ResourcesDropdownContent,
+      mobileLinks: section === 'moneyone' ? [
+        // For MoneyOne: exclude privacy policy and terms & conditions
+        { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
+        { title: "Trust & Security", href: "/employment/trust-security" },
+        { title: "Blog", href: "/blog" },
+        { title: "In The News", href: "/blog/in-the-news" }
+      ] : [
+        // For other sections: include all items
+        { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
+        { title: "Trust & Security", href: "/employment/trust-security" },
+        { title: "Blog", href: "/blog" },
+        { title: "In The News", href: "/blog/in-the-news" },
+        { title: "Terms and Conditions", href: "/common/terms-conditions" },
+        { title: "Privacy Policy", href: "/common/policies" }
+      ]
+    }
+  ];
+};
 
 // Mobile sections in the requested order - updated to match desktop dropdown content
-const getMobileSections = (section: CompanySection): MobileSection[] => [
-  {
-    id: "about",
-    title: "ABOUT US",
-    links: [
-      { title: "Team", href: "/common/team" },
-      { title: "Vision", href: "/common/vision-mission" },
-      { title: "Leadership", href: "/common/leadership" },
-      { title: "Values", href: "/employment/values" }
-    ]
-  },
-  {
-    id: "products",
-    title: "PRODUCTS",
-    links: section === 'moneyone' ? [
-      // BFSI Section only for MoneyOne - no new tab for internal links
-      { title: "OneMoney AA", href: "/onemoney" },
-      { title: "FinPro FIU TSP", href: "/moneyone/products/finpro" },
-      { title: "FinShare FIP TSP", href: "/moneyone/products/finshare" },
-      { title: "Financial Services", href: "/moneyone/financial-services" }
-    ] : [
-      // BFSI Section - open in new tab when viewing from Equal/OneMoney pages
-      { title: "OneMoney AA", href: "/onemoney" },
-      { title: "FinPro FIU TSP", href: "/moneyone/products/finpro", openInNewTab: true },
-      { title: "FinShare FIP TSP", href: "/moneyone/products/finshare", openInNewTab: true },
-      { title: "Financial Services", href: "/moneyone/financial-services", openInNewTab: true },
-      // Employment Section
-      { title: "Enterprise Hiring", href: "/employment/products/enterprise-hiring" },
-      { title: "Gig Hiring", href: "/employment/products/gig-hiring" },
-      { title: "Financial Analytics", href: "/employment/products/financial-services" },
-      { title: "Staffing & Contract", href: "/employment/products/staffing" }
-    ]
-  },
-  {
-    id: "solutions",
-    title: "SOLUTIONS",
-    links: section === 'moneyone' ? [
-      // MoneyOne specific solutions
-      { title: "Wealth Management", href: "/moneyone/financial-services#wealth-management" },
-      { title: "Lending", href: "/moneyone/financial-services#lending" },
-      { title: "Advisory", href: "/moneyone/financial-services#advisory" },
-      { title: "Brokerage", href: "/moneyone/financial-services#brokerage" }
-    ] : [
-      // Original solutions for other sections
-      { title: "Financial Services", href: "/moneyone/financial-services" },
-      { title: "Employee Verification", href: "/employment/solutions" },
-      { title: "Identity Verification", href: "/employment" },
-      { title: "Financial Analytics", href: "/moneyone/financial-services#moneyone-section" }
-    ]
-  },
-  {
-    id: "resources",
-    title: "RESOURCES",
-    links: section === 'moneyone' ? [
-      // For MoneyOne: exclude privacy policy and terms & conditions
-      { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
-      { title: "Trust & Security", href: "/employment/trust-security" },
-      { title: "Blog", href: "/blog" },
-      { title: "In The News", href: "/blog/in-the-news" }
-    ] : [
-      // For other sections: include all items
-      { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
-      { title: "Trust & Security", href: "/employment/trust-security" },
-      { title: "Blog", href: "/blog" },
-      { title: "In The News", href: "/blog/in-the-news" },
-      { title: "Terms and Conditions", href: "/common/terms-conditions" },
-      { title: "Privacy Policy", href: "/common/policies" }
-    ]
+const getMobileSections = (section: CompanySection): MobileSection[] => {
+  // OneMoney section only shows Products, About Us, and Resources
+  if (section === 'onemoney') {
+    return [
+      {
+        id: "products",
+        title: "PRODUCTS",
+        links: [
+          { title: "How OneMoney Works", href: "/onemoney#what-is-onemoney-section" },
+          { title: "Use Cases", href: "/onemoney#solutions" }
+        ]
+      },
+      {
+        id: "about",
+        title: "ABOUT US",
+        links: [
+          { title: "Team", href: "/common/team" },
+          { title: "Vision", href: "/common/vision-mission" },
+          { title: "Leadership", href: "/common/leadership" },
+          { title: "Values", href: "/employment/values" }
+        ]
+      },
+      {
+        id: "resources",
+        title: "RESOURCES",
+        links: [
+          { title: "Privacy Policy", href: "/onemoney/policies" },
+          { title: "Terms and Conditions", href: "/onemoney/termsconditions" },
+          { title: "Timeline", href: "/onemoney/timeline" },
+          { title: "Compliance", href: "/onemoney/compliance" }
+        ]
+      }
+    ];
   }
-];
+
+  // Default configuration for other sections
+  return [
+    {
+      id: "about",
+      title: "ABOUT US",
+      links: [
+        { title: "Team", href: "/common/team" },
+        { title: "Vision", href: "/common/vision-mission" },
+        { title: "Leadership", href: "/common/leadership" },
+        { title: "Values", href: "/employment/values" }
+      ]
+    },
+    {
+      id: "products",
+      title: "PRODUCTS",
+      links: section === 'moneyone' ? [
+        // BFSI Section only for MoneyOne - no new tab for internal links
+        { title: "OneMoney AA", href: "/onemoney" },
+        { title: "FinPro FIU TSP", href: "/moneyone/products/finpro" },
+        { title: "FinShare FIP TSP", href: "/moneyone/products/finshare" },
+        { title: "Financial Services", href: "/moneyone/financial-services" }
+      ] : [
+        // BFSI Section - open in new tab when viewing from Equal/OneMoney pages
+        { title: "OneMoney AA", href: "/onemoney" },
+        { title: "FinPro FIU TSP", href: "/moneyone/products/finpro", openInNewTab: true },
+        { title: "FinShare FIP TSP", href: "/moneyone/products/finshare", openInNewTab: true },
+        { title: "Financial Services", href: "/moneyone/financial-services", openInNewTab: true },
+        // Employment Section
+        { title: "Enterprise Hiring", href: "/employment/products/enterprise-hiring" },
+        { title: "Gig Hiring", href: "/employment/products/gig-hiring" },
+        { title: "Financial Analytics", href: "/employment/products/financial-services" },
+        { title: "Staffing & Contract", href: "/employment/products/staffing" }
+      ]
+    },
+    {
+      id: "solutions",
+      title: "SOLUTIONS",
+      links: section === 'moneyone' ? [
+        // MoneyOne specific solutions
+        { title: "Wealth Management", href: "/moneyone/financial-services#wealth-management" },
+        { title: "Lending", href: "/moneyone/financial-services#lending" },
+        { title: "Advisory", href: "/moneyone/financial-services#advisory" },
+        { title: "Brokerage", href: "/moneyone/financial-services#brokerage" }
+      ] : [
+        // Original solutions for other sections
+        { title: "Financial Services", href: "/moneyone/financial-services" },
+        { title: "Employee Verification", href: "/employment/solutions" },
+        { title: "Identity Verification", href: "/employment" },
+        { title: "Financial Analytics", href: "/moneyone/financial-services#moneyone-section" }
+      ]
+    },
+    {
+      id: "resources",
+      title: "RESOURCES",
+      links: section === 'moneyone' ? [
+        // For MoneyOne: exclude privacy policy and terms & conditions
+        { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
+        { title: "Trust & Security", href: "/employment/trust-security" },
+        { title: "Blog", href: "/blog" },
+        { title: "In The News", href: "/blog/in-the-news" }
+      ] : [
+        // For other sections: include all items
+        { title: "Our Newsletter", href: "https://equalidentity.substack.com/" },
+        { title: "Trust & Security", href: "/employment/trust-security" },
+        { title: "Blog", href: "/blog" },
+        { title: "In The News", href: "/blog/in-the-news" },
+        { title: "Terms and Conditions", href: "/common/terms-conditions" },
+        { title: "Privacy Policy", href: "/common/policies" }
+      ]
+    }
+  ];
+};
 
 // Animated hamburger menu component
 const AnimatedHamburger = memo(({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
